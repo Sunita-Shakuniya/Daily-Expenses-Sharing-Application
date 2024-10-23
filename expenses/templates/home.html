@@ -1,0 +1,163 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Expense Sharing</title>
+    <link rel="stylesheet" href="{% static 'static/css/style.css' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">ES</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+    
+        <div class="collapse navbar-collapse" id="navbarColor01">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'view_balance_sheet' %}">Balance Sheet</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">About Project</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">logout</a>
+              </li>
+          </ul>
+          
+        </div>
+      </nav>
+    <div class="container">
+        <header>
+            <h1>Tract Your Daily Expenses Here !</h1>
+        </header>
+        <main>
+            <div class="features">
+                <div class="feature-box">
+                    <h3>Add Expenses</h3>
+                    <a class="btn btn-primary" id= "add-expense-btn" role="button">New Expense</a>
+                    <a class="btn btn-primary" href="#" role="button">add Frined</a>
+                </div>
+            </div>
+        </main>
+        <!-- Hidden form that will be shown when the button is clicked -->
+        <div id="expense-form" class="mt-3 collapse">
+            <form id="new-expense-form">
+                <!-- Amount input field -->
+                <div class="form-group">
+                    <label for="amount">Amount:</label>
+                    <input type="number" class="form-control" id="amount" placeholder="Enter amount">
+                </div>
+
+                <!-- Friends selection (dropdown or checkbox list) -->
+                <div class="form-group">
+                    <label for="friends">Select Friends:</label>
+                    <div id="friends-list">
+                        <!-- Dynamically loaded list of friends (checkboxes) -->
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="friend1" id="friend1">
+                            <label class="form-check-label" for="friend1">Friend 1</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="friend2" id="friend2">
+                            <label class="form-check-label" for="friend2">Friend 2</label>
+                        </div>
+                        <!-- Add more friends dynamically here -->
+                    </div>
+                </div>
+
+                <!--Payment Division Method Selection -->
+                <div class="form-group">
+                    <label>Spliting method: </label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="paymentMethod" id="cash" value="cash" checked>
+                        <label class="form-check-label" for="cash">Equal</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="paymentMethod" id="card" value="card">
+                        <label class="form-check-label" for="card">Exact</label>
+                    </div>
+                    
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="paymentMethod" id="card" value="card">
+                        <label class="form-check-label" for="card">Percentage</label>
+                    </div>
+                    
+                    
+                </div>
+
+                <!-- Submit button -->
+                <button type="button" class="btn btn-success" id="submit-expense-btn">Submit Expense</button>
+            </form>
+        </div>
+
+        <!--
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <p class="col-md-4 mb-0 text-muted">© 2021 Company, Inc</p>
+        
+            <a href="/" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
+            </a>
+        
+            <ul class="nav col-md-4 justify-content-end">
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Home</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Pricing</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
+            </ul>
+        </footer>-->
+          
+    </div>
+    <script>
+        // Show the form when the 'Add Expense' button is clicked
+        document.getElementById('add-expense-btn').addEventListener('click', function() {
+            document.getElementById('expense-form').classList.toggle('collapse');
+        });
+
+        // Handle form submission (AJAX to prevent page reload)
+        document.getElementById('submit-expense-btn').addEventListener('click', function() {
+            const amount = document.getElementById('amount').value;
+            const friends = Array.from(document.querySelectorAll('#friends-list input:checked'))
+                                .map(friend => friend.value);
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+            // Simulate sending data to the backend
+            console.log('Amount:', amount);
+            console.log('Friends:', friends);
+            console.log('Payment Method:', paymentMethod);
+
+            // You can use AJAX or Fetch API to send data to the backend here
+            // For example:
+            // fetch('/add-expense/', {
+            //     method: 'POST',
+            //     body: JSON.stringify({ amount, friends, paymentMethod }),
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //         'X-CSRFToken': '{{ csrf_token }}'  // Include CSRF token for Django
+            //     }
+            // }).then(response => response.json())
+            //   .then(data => {
+            //       // Handle success
+            //       console.log('Expense added successfully:', data);
+            //   }).catch(error => {
+            //       // Handle error
+            //       console.error('Error adding expense:', error);
+            //   });
+        });
+
+        
+    </script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+</html>
